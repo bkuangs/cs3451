@@ -88,9 +88,9 @@ vec4 paint_canvas(float x, float y)
 {
 	//// uncomment the following functions to see different demo implementations
 	//return paint_circle(x,y);
-	return paint_triangle(x,y);
+	//return paint_triangle(x,y);
 	//return paint_checkerboard(x,y);
-	//return paint_sin(x,y);
+	return paint_sin(x,y);
 }
 
 // The function called in the fragment shader
