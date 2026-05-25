@@ -1,0 +1,41 @@
+file(REMOVE_RECURSE
+  "CMakeFiles/a3.dir/CMakeFiles/4.3.2/CompilerIdCXX/CMakeCXXCompilerId.cpp.o"
+  "CMakeFiles/a3.dir/CMakeFiles/4.3.2/CompilerIdCXX/CMakeCXXCompilerId.cpp.o.d"
+  "CMakeFiles/a3.dir/CMakeFiles/4.3.2/CompilerIdCXX/apple-sdk.cpp.o"
+  "CMakeFiles/a3.dir/CMakeFiles/4.3.2/CompilerIdCXX/apple-sdk.cpp.o.d"
+  "CMakeFiles/a3.dir/Users/bkuang/Georgia_Tech/cs3451/ext/stb/StbImage.cpp.o"
+  "CMakeFiles/a3.dir/Users/bkuang/Georgia_Tech/cs3451/ext/stb/StbImage.cpp.o.d"
+  "CMakeFiles/a3.dir/Users/bkuang/Georgia_Tech/cs3451/ext/tiny_gltf/TinyGltfLoader.cpp.o"
+  "CMakeFiles/a3.dir/Users/bkuang/Georgia_Tech/cs3451/ext/tiny_gltf/TinyGltfLoader.cpp.o.d"
+  "CMakeFiles/a3.dir/Users/bkuang/Georgia_Tech/cs3451/ext/tiny_obj_loader/TinyObjLoader.cpp.o"
+  "CMakeFiles/a3.dir/Users/bkuang/Georgia_Tech/cs3451/ext/tiny_obj_loader/TinyObjLoader.cpp.o.d"
+  "CMakeFiles/a3.dir/Users/bkuang/Georgia_Tech/cs3451/ext/tiny_obj_loader/tiny_obj_loader.cpp.o"
+  "CMakeFiles/a3.dir/Users/bkuang/Georgia_Tech/cs3451/ext/tiny_obj_loader/tiny_obj_loader.cpp.o.d"
+  "CMakeFiles/a3.dir/Users/bkuang/Georgia_Tech/cs3451/src/OpenGLBufferObjects.cpp.o"
+  "CMakeFiles/a3.dir/Users/bkuang/Georgia_Tech/cs3451/src/OpenGLBufferObjects.cpp.o.d"
+  "CMakeFiles/a3.dir/Users/bkuang/Georgia_Tech/cs3451/src/OpenGLMarkerObjects.cpp.o"
+  "CMakeFiles/a3.dir/Users/bkuang/Georgia_Tech/cs3451/src/OpenGLMarkerObjects.cpp.o.d"
+  "CMakeFiles/a3.dir/Users/bkuang/Georgia_Tech/cs3451/src/OpenGLObject.cpp.o"
+  "CMakeFiles/a3.dir/Users/bkuang/Georgia_Tech/cs3451/src/OpenGLObject.cpp.o.d"
+  "CMakeFiles/a3.dir/Users/bkuang/Georgia_Tech/cs3451/src/OpenGLShaderProgram.cpp.o"
+  "CMakeFiles/a3.dir/Users/bkuang/Georgia_Tech/cs3451/src/OpenGLShaderProgram.cpp.o.d"
+  "CMakeFiles/a3.dir/Users/bkuang/Georgia_Tech/cs3451/src/OpenGLTexture.cpp.o"
+  "CMakeFiles/a3.dir/Users/bkuang/Georgia_Tech/cs3451/src/OpenGLTexture.cpp.o.d"
+  "CMakeFiles/a3.dir/Users/bkuang/Georgia_Tech/cs3451/src/OpenGLViewer.cpp.o"
+  "CMakeFiles/a3.dir/Users/bkuang/Georgia_Tech/cs3451/src/OpenGLViewer.cpp.o.d"
+  "CMakeFiles/a3.dir/Users/bkuang/Georgia_Tech/cs3451/src/OpenGLWindow.cpp.o"
+  "CMakeFiles/a3.dir/Users/bkuang/Georgia_Tech/cs3451/src/OpenGLWindow.cpp.o.d"
+  "CMakeFiles/a3.dir/Users/bkuang/Georgia_Tech/cs3451/src/glad.cpp.o"
+  "CMakeFiles/a3.dir/Users/bkuang/Georgia_Tech/cs3451/src/glad.cpp.o.d"
+  "CMakeFiles/a3.dir/Users/bkuang/Georgia_Tech/cs3451/src/mikktspace.cpp.o"
+  "CMakeFiles/a3.dir/Users/bkuang/Georgia_Tech/cs3451/src/mikktspace.cpp.o.d"
+  "CMakeFiles/a3.dir/main.cpp.o"
+  "CMakeFiles/a3.dir/main.cpp.o.d"
+  "a3"
+  "a3.pdb"
+)
+
+# Per-language clean rules from dependency scanning.
+foreach(lang CXX)
+  include(CMakeFiles/a3.dir/cmake_clean_${lang}.cmake OPTIONAL)
+endforeach()
