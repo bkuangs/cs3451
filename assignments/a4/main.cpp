@@ -81,15 +81,26 @@ public:
 
         //// Step 7: Add your customized mesh objects and specify their transform and material properties by mimicking Create_Bunny_Scene() 
         /* Your implementation starts */
-
+        auto starship = Add_Obj_Mesh_Object("starship.obj");
+        Matrix4f t3;
+        t3 << .025, 0., 0., 0.,
+            0., .025, 0., 0.,
+            0., 0., .025, 0.,
+            0., 0., 0., 1.;
+        starship->Set_Model_Matrix(t3);
+        //// set material properties
+        starship->Set_Ka(Vector3f(0.12f, 0.13f, 0.14f));
+        starship->Set_Kd(Vector3f(0.12f, 0.13f, 0.15f));
+        starship->Set_Ks(Vector3f(9.0f, 9.0f, 9.0f));
+        starship->Set_Shininess(260.f);
         /* Your implementation ends */
     }
 
     //// Step 7: Comment out Create_Bunny_Scene() and uncomment Create_Shining_Scene() for your customized scene.
     virtual void Initialize_Data()
     {
-        Create_Bunny_Scene();               //// TODO: comment out this line for your customized scene
-        //Create_Shining_Scene();           //// TODO: uncomment this line for your customized scene
+        // Create_Bunny_Scene();               //// TODO: comment out this line for your customized scene
+        Create_Shining_Scene();           //// TODO: uncomment this line for your customized scene
 
         OpenGLShaderLibrary::Instance()->Add_Shader_From_File("a4_vert.vert", "a4_frag.frag", "a4_shader");
         for (auto& mesh_obj : mesh_object_array) {

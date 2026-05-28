@@ -45,9 +45,11 @@ vec4 shading_normal()
 {
     vec3 _normal = normalize(vtx_normal);
     
-    /* your implementation starts */
+    float new_x = (_normal.x + 1.) / 2.;
+    float new_y = (_normal.y + 1.) / 2.;
+    float new_z = (_normal.z + 1.) / 2.;
 
-    return vec4(0.f,0.f,0.f,1.f);
+    return vec4(new_x,new_y,new_z,1.f);
     /* your implementation ends */
 }
 
@@ -64,9 +66,7 @@ vec4 shading_normal()
 
 vec4 shading_ambient(Light light) 
 {
-    /* your implementation starts */
-    
-    return vec4(0.f,0.f,0.f,1.f);
+    return vec4(ka * light.Ia, 1.f);
     /* your implementation ends */
 }
 
@@ -87,8 +87,10 @@ vec4 shading_ambient(Light light)
 vec4 shading_lambertian(Light light, vec3 p, vec3 s, vec3 n) 
 {
     /* your implementation starts */
+    vec3 l = normalize(s - p);
+    float cos_theta = max(0., dot(n, l));
 
-    return vec4(0.f,0.f,0.f,1.f);
+    return vec4(kd * light.Id * cos_theta, 1.f);
     /* your implementation ends */
 }
 
@@ -110,8 +112,19 @@ vec4 shading_lambertian(Light light, vec3 p, vec3 s, vec3 n)
 vec4 shading_phong(Light light, vec3 e, vec3 p, vec3 s, vec3 n) 
 {
     /* your implementation starts */
-    
-    return vec4(0.f,0.f,0.f,1.f);
+    vec3 l = normalize(s - p);
+    vec3 v = normalize(e - p);
+    vec3 r = reflect(-l, n);
+
+    float diffuse = max(0., dot(n, l));
+    float specular = pow(max(0., dot(r, v)), shininess);
+
+    vec3 color = (ka * light.Ia) + (kd * light.Id * diffuse) + (ks * light.Is * specular);
+
+    float env = pow(1.0 - max(0.0, dot(n, v)), 2.0);
+    color += vec3(0.6, 0.75, 0.9) * env;
+
+    return vec4(color, 1.f);
     /* your implementation ends */
 }
 
@@ -132,14 +145,14 @@ Light get_spinny_light(Light light)
     /* your implementation starts */
 
     mat4 light_model_mtx = 
-        mat4(1., 0., 0., 0., 
-             0., 1., 0., 0., 
+        mat4(cos(theta), -sin(theta), 0., 0., 
+             sin(theta), cos(theta), 0., 0., 
              0., 0., 1., 0., 
              0., 0., 0., 1.);
     
     /* your implementation ends */
 
-    return Light((light_model_mtx * vec4(light.position, 1)).xyz, light.Ia, light.Id, light.Is);
+    return Light((transpose(light_model_mtx) * vec4(light.position, 1)).xyz, light.Ia, light.Id, light.Is);
 }
 
 void main() 
@@ -159,7 +172,7 @@ void main()
     //// Step 1: visualize normal vectors as colors
     //// Your task is to implement the shading_normal function
 
-    frag_color = shading_normal();
+    //// frag_color = shading_normal();
 
     //// Step 2: ambient shading
     //// Your task is to implement the shading_normal function 
@@ -190,9 +203,15 @@ void main()
     //// Uncomment the following line, declare a new light, and add its contribution to frag_color.
 
     /* Your implementation starts here */
+
+    Light light2 = Light(vec3(-3, 1, 3), 
+                        vec3(0.05, 0.02, 0.03), 
+                        vec3(0.4, 0.2, 0.3), 
+                        vec3(0.4, 0.2, 0.3));
     
+    vec3 s2 = light2.position;
     
-    // frag_color = shading_phong(light1, e, p, s1, n);
+    // frag_color = shading_phong(light1, e, p, s1, n) + shading_phong(light2, e, p, s2, n);
     
     /* Your implementation ends here */
 
@@ -201,7 +220,7 @@ void main()
     //// Your implementation will take place in the function get_spinny_light
     //// After implementing rotation in get_spinny_light, uncomment the following two lines and press key 'p' to start the animation
     
-    // Light spinnyLight = get_spinny_light(light1);
+    Light spinnyLight = get_spinny_light(light1);
     // frag_color = shading_phong(spinnyLight, e, p, spinnyLight.position, n);
 
     //// Step 7: your customized lighting effect
@@ -210,5 +229,5 @@ void main()
     //// Here we provide the phong shading model as the default implementation
     //// Customize it with your own lighting model
 
-    // frag_color = shading_phong(light1, e, p, s1, n);
+    frag_color = shading_phong(light1, e, p, s1, n);
 }

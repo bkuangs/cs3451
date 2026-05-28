@@ -55,8 +55,8 @@ public:
 		Create_Background(OpenGLColor(0.71f, 0.6f, 0.17f, 1.f), OpenGLColor(0.71f, 0.87f, 0.17f, 1.f));
 		OpenGLShaderLibrary::Instance()->Add_Shader_From_File("a3_vert.vert", "a3_frag.frag", "a3_shading"); ////bind shader for this assignment
 
-		Create_Angry_Bird_Palace(); //// TODO: Comment this line when you start to implement your customized scene
-		//// Create_Angry_Bird_Garden(); //// TODO: Uncomment this line when you start to implement your customized scene
+		//// Create_Angry_Bird_Palace(); //// TODO: Comment this line when you start to implement your customized scene
+		Create_Angry_Bird_Garden(); //// TODO: Uncomment this line when you start to implement your customized scene
 	}
 
 	void Create_Angry_Bird_Palace()
@@ -284,7 +284,7 @@ public:
 		//// draw the ground
 		Add_Ground();
 
-		//// helper methods for transforms //// 
+		//// helper methods for transforms ////
 		// translate
 		auto T = [](float x, float y, float z)
 		{
