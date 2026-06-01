@@ -172,7 +172,7 @@ void main()
     //// Step 1: visualize normal vectors as colors
     //// Your task is to implement the shading_normal function
 
-    //// frag_color = shading_normal();
+    // frag_color = shading_normal();
 
     //// Step 2: ambient shading
     //// Your task is to implement the shading_normal function 
@@ -229,5 +229,12 @@ void main()
     //// Here we provide the phong shading model as the default implementation
     //// Customize it with your own lighting model
 
-    frag_color = shading_phong(light1, e, p, s1, n);
+    Light light3 = Light(vec3(-20, 30, 40), 
+                        vec3(0.18, 0.15, 0.10), 
+                        vec3(1.3, 1.15, 0.85), 
+                        vec3(1.8, 1.65, 1.25));
+    
+    vec3 s3 = light3.position;
+
+    frag_color = shading_phong(light3, e, p, s3, n);
 }

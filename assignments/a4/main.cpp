@@ -83,9 +83,9 @@ public:
         /* Your implementation starts */
         auto starship = Add_Obj_Mesh_Object("starship.obj");
         Matrix4f t3;
-        t3 << .025, 0., 0., 0.,
-            0., .025, 0., 0.,
-            0., 0., .025, 0.,
+        t3 << .02, 0., 0., 0.,
+            0., .02, 0., -0.5,
+            0., 0., .02, 0.,
             0., 0., 0., 1.;
         starship->Set_Model_Matrix(t3);
         //// set material properties
