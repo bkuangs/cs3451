@@ -9,6 +9,11 @@ out vec4 fragColor;
 uniform sampler2D bufferTexture;
 uniform sampler2D floor_color;
 
+// planets
+uniform sampler2D sun_color;
+uniform sampler2D venus_color;
+uniform sampler2D moon_color;
+
 #define M_PI 3.1415925585
 #define Epsilon 1e-6
 
@@ -127,7 +132,8 @@ const Hit noHit = Hit(
 
 void initScene() 
 {
-    camera = Camera(vec3(0, 15, 50), vec3(5, 0, 0), vec3(0, 3, -3), vec3(-2.5, -1.5, -1));
+    float aspect = iResolution.x / iResolution.y;
+    camera = Camera(vec3(0, 8, 0), vec3(5 * aspect, 0, 0), vec3(0, 0, -5), vec3(-2.5 * aspect, 0, 2.5));
 
     // Floor Material 
     materials[0].ka = vec3(0.1);
@@ -167,9 +173,9 @@ void initScene()
                             /*Is*/ vec3(0.5, 0.5, 0.5));
     planes[0] = Plane(vec3(0, 1, 0), vec3(0, 0, 0), 0);
 
-    spheres[0] = Sphere(vec3(0, 0.6, -1), 0.6, 1);
-    spheres[1] = Sphere(vec3(1.1, 0.4, -0.8), 0.4, 2);
-    spheres[2] = Sphere(vec3(-1.2, 0.5, -0.8), 0.5, 3);
+    spheres[0] = Sphere(vec3(0, 0.6, 0), 0.6, 1);
+    spheres[1] = Sphere(vec3(0, 0.4, 1.2), 0.4, 2);
+    spheres[2] = Sphere(vec3(0, 0.5, -1.2), 0.5, 3);
 }
 
 /////////////////////////////////////////////////////
@@ -189,17 +195,17 @@ Hit hitPlane(const Ray r, const Plane pl)
 
     /* default implementation starts */
     
-    //// uncomment the following lines and run the code
+    // uncomment the following lines and run the code
 
-    // float t = dot(pl.p - r.ori, pl.n) / dot(r.dir, pl.n);
+    float t = dot(pl.p - r.ori, pl.n) / dot(r.dir, pl.n);
 
-    // if(t <= 0.0) 
-    //    return noHit;
+    if(t <= 0.0) 
+       return noHit;
 
-    // vec3 hitP = r.ori + t * r.dir;
-    // vec3 normal = pl.n;
+    vec3 hitP = r.ori + t * r.dir;
+    vec3 normal = pl.n;
 
-    // hit = Hit(t, hitP, normal, pl.matId);
+    hit = Hit(t, hitP, normal, pl.matId);
 
     /* default implementation ends */
     
@@ -220,7 +226,21 @@ Hit hitSphere(const Ray r, const Sphere s)
     Hit hit = noHit;
 	
     /* your implementation starts */
+    vec3 v = r.ori - s.ori;
 
+    float a = dot(r.dir, r.dir);
+    float b = 2.0 * dot(v, r.dir);
+    float c = dot(v, v) - (s.r * s.r);
+
+    float delta = (b * b) - 4.0 * a * c;
+    if (delta < 0.0) return noHit;
+
+    float t = ((-1.0 * b) - sqrt(delta)) / (2.0 * a);
+
+    vec3 p = r.ori + vec3(t, t, t) * r.dir;
+    vec3 n = (p - s.ori) / vec3(s.r, s.r, s.r);
+
+    hit = Hit(t, p, n, s.matId);
 	/* your implementation ends */
     
 	return hit;
@@ -270,10 +290,30 @@ vec3 shadingPhong(Light light, int matId, vec3 e, vec3 p, vec3 s, vec3 n)
     float shininess = materials[matId].shininess;
     
     /* your implementation starts */
-	
+	vec3 l = normalize(s - p);
+    vec3 v = normalize(e - p);
+    vec3 r = reflect(-l, n);
+
+    kd = sampleDiffuse(matId, p);
+    float diffuse = max(0.0, dot(normalize(n), l));
+    float specular = pow(max(0., dot(r, v)), shininess);
+
+    vec3 phong = (ka * light.Ia) + (kd * light.Id * diffuse) + (ks * light.Is * specular);
+
+    color = phong;
 	/* your implementation ends */
     
 	return color;
+}
+
+vec2 sphereUV(vec3 p, Sphere s)
+{
+    vec3 q = normalize(p - s.ori);
+
+    float u = atan(q.z, q.x) / (2.0 * M_PI) + 0.5;
+    float v = asin(q.y) / M_PI + 0.5;
+
+    return vec2(u, v);
 }
 
 /////////////////////////////////////////////////////
@@ -289,14 +329,25 @@ vec3 sampleDiffuse(int matId, vec3 p)
 
     /* apply texture for the ground */
     if(matId == 0) {		
-		vec2 uv = vec2(p.x, p.z) / 5.0;     /* uv texture on the ground */
+		float aspect = iResolution.x / iResolution.y;
+		vec2 uv = vec2(
+            (p.x + 2.5 * aspect) / (5.0 * aspect),
+            (p.z + 2.5) / 5.0
+        );                                  /* uv texture on the ground */
 
         /* your implementation starts */
-        
-        
+        color = mat_color * texture(floor_color, clamp(uv, vec2(0.0), vec2(1.0))).rgb;
 		/* your implementation ends */
     }
-
+    else if (matId == 1) {
+        color = texture(sun_color, sphereUV(p, spheres[0])).rgb;
+    }
+    else if (matId == 2) {
+        color = texture(venus_color, sphereUV(p, spheres[1])).rgb;
+    }
+    else if (matId == 3) {
+        color = texture(moon_color, sphereUV(p, spheres[2])).rgb;
+    }
     /* no texture for the spheres */
     
     return color;
@@ -320,8 +371,9 @@ bool isShadowed(Light light, Hit h)
 	vec3 dir = normalize(toLight);                  /* direction of toLight */
 	
     /* your implementation starts */
-	
-    
+    Ray shadowRay = Ray(intersect + vec3(Epsilon), dir);
+    Hit hit = findHit(shadowRay);
+    if (hit.t > 0 && hit.t < t_max) shadowed = true;
 	/* your implementation ends */
     
 	return shadowed;
@@ -372,7 +424,7 @@ vec3 rayTrace(in Ray r, out Hit hit)
 
 /* your implementation starts */
 
-const int recursiveDepth = 1;
+const int recursiveDepth = 50;
 
 /* your implementation ends */
 
@@ -412,7 +464,8 @@ void main()
         vec3 reflected_dir = vec3(0);           /* calculate the reflected dir */
 
 		/* your implementation starts */
-        
+        reflected_dir = incoming_dir - 2.0 * dot(incoming_dir, normal) * normal;
+        recursiveRay = Ray(intersect, reflected_dir);
 		/* your implementation ends */
     }
 	

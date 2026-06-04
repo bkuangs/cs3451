@@ -35,12 +35,18 @@ public:
     {
         OpenGLShaderLibrary::Instance()->Add_Shader_From_File("common.vert", "ray_tracing.frag", "rt");
         OpenGLShaderLibrary::Instance()->Add_Shader_From_File("common.vert", "basic_frag.frag", "screen");
+        OpenGLTextureLibrary::Instance()->Add_Texture_From_File("sun.jpg", "sun_color");
+        OpenGLTextureLibrary::Instance()->Add_Texture_From_File("venus.jpg", "venus_color");
+        OpenGLTextureLibrary::Instance()->Add_Texture_From_File("moon.jpg", "moon_color");
         screen_cover = Add_Interactive_Object<OpenGLScreenCover>();
         Set_Polygon_Mode(screen_cover, PolygonMode::Fill);
         Uniform_Update();
         // Add texture
-        OpenGLTextureLibrary::Instance()->Add_Texture_From_File("floor.jpg", "floor_color");
+        OpenGLTextureLibrary::Instance()->Add_Texture_From_File("space.jpg", "floor_color");
         screen_cover->Add_Texture("floor_color", OpenGLTextureLibrary::Get_Texture("floor_color"));
+        screen_cover->Add_Texture("sun_color", OpenGLTextureLibrary::Get_Texture("sun_color"));
+        screen_cover->Add_Texture("venus_color", OpenGLTextureLibrary::Get_Texture("venus_color"));
+        screen_cover->Add_Texture("moon_color", OpenGLTextureLibrary::Get_Texture("moon_color"));
         
         screen_cover->use_tex = true;
         screen_cover->Set_Data_Refreshed();
